@@ -1,0 +1,51 @@
+#!/bin/bash
+#Ryan McVicker 12.10.2021
+
+#script to generate javafx project with shell script to run said project
+# usage:
+# 	./javafxGen -n "NAME" -d [/../..]
+#default name if none specified
+
+NAME="generated_javafx_project"
+OUTPUTDIR=$HOME
+#name for the template used in JavaFXTemplate/Templates/{NAME}
+TEMPLATE="HelloWorld.java"
+
+while getopts t:d:n: flag
+do
+	case "${flag}" in
+		d) OUTPUTDIR=${OPTARG};;
+		n) NAME=${OPTARG};;
+		t) TEMPLATE=${OPTARG};;
+	esac
+done 
+
+# create sub directories with the name that 
+mkdir -vp $OUTPUTDIR/$NAME/{bin,src/JavaFXTemplate}
+
+#move the specified template over to the src/directory 
+#TODO: move JavaFXTemplate
+
+#check if template exists
+
+if test -f "$HOME/Journal/JavaFXTemplate/Templates/$TEMPLATE"; then
+	echo "[ found template $TEMPLATE ]"
+	cp -vp $HOME/Journal/JavaFXTemplate/Templates/$TEMPLATE $OUTPUTDIR/$NAME/src/JavaFXTemplate
+
+	echo "[ copied over template $TEMPLATE ]"
+fi
+#create a bash script for running the project
+
+
+
+cat > $OUTPUTDIR/$NAME/$NAME.bash<<EOF 
+#!/bin/bash
+clear
+javac -s $NAME -d bin src/JavaFXTemplate/*.java
+java -cp bin JavaFXTemplate.$TEMPLATE
+EOF
+
+
+
+
+
